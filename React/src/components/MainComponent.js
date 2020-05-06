@@ -11,7 +11,7 @@ import {Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import About from './AboutComponent';
 import { connect } from 'react-redux';
 import {addComment,postComment, fetchDishes, fetchLeaders,
-   fetchComments, fetchPromos,postFeedback} from '../redux/ActionCreators';
+   fetchComments, fetchPromos} from '../redux/ActionCreators';
 import {Loading } from './LoadingComponent';
 import { actions } from 'react-redux-form';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -31,8 +31,7 @@ const mapDispatchToProps = dispatch => ({
   fetchComments: () => dispatch(fetchComments()),
   fetchPromos: () => dispatch(fetchPromos()),
   fetchLeaders: () => dispatch(fetchLeaders()),
-  postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
-  postFeedback: (feedback) => dispatch(postFeedback(feedback))
+  postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment))
 });
 class Main extends Component {
   constructor(props){
@@ -44,17 +43,16 @@ class Main extends Component {
   componentDidMount() {
     this.props.fetchDishes();
     this.props.fetchComments();
-    this.props.fetchPromos();
-
     this.props.fetchLeaders();
-    
+    this.props.fetchPromos();
   }
 
 
   render(){
 
     const HomePage = () => {
-
+      if(this.props.dishes.dishes)
+      {
       return(
         <Home 
           dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
@@ -64,14 +62,12 @@ class Main extends Component {
           promoLoading={this.props.promotions.isLoading}
           promoErrMess={this.props.promotions.errMess}
           
-
-          leader={this.props.leaders.leaders.filter((leader) => leader.featured)[0]}
-          leadersLoading={this.props.leaders.isLoading}
-          leadersErrMess={this.props.leaders.errMess}
-
-          
         />
       );
+      }
+      else{
+        return <Loading/>;
+      }
     }
 
     const DishWithId = ({match}) => {
