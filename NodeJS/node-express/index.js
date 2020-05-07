@@ -3,18 +3,19 @@ const http=require('http');
 const hostname= 'localhost';
 const port = 3000;
 const morgan= require('morgan');
-
+const bodyParser = require('body-parser');
 
 const app= express();
 app.use(morgan('dev'));
 app.use(express.static(__dirname+'/public'));
 
-app.use((req,res,next)=>{
-    res.statusCode=200;
-    res.setHeader('Content-Type','text/html');
+const dishRouter=require('./routes/dishRouter');
+const promoRouter=require('./routes/promoRouter');
+const leaderRouter=require('./routes/leaderRouter');
 
-    res.end("THIS IS EXPRESS");
-});
+app.use('/dishes',dishRouter);
+app.use('/promotions',promoRouter);
+app.use('/leaders',leaderRouter);
 
 const server = http.createServer(app);
 
