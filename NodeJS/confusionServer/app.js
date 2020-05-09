@@ -7,6 +7,17 @@ var logger = require('morgan');
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
+const mongoose = require('mongoose');
+
+const Dishes= require('./models/dishes');
+const Promotions=require('./models/promotions');
+const Leaders=require('./models/leaders');
+
+const url= 'mongodb://localhost:27017/conFusion';
+const connect = mongoose.connect(url);
+connect.then((db)=>{
+  console.log("Connected successfully!");
+}, (err)=>{ console.error(err) });
 
 var app = express();
 
